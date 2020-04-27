@@ -47,10 +47,10 @@ given the prediction `ŷ` and true values `y`.
     Huber loss = |
                  |  δ * (|ŷ - y| - 0.5 * δ), otherwise
 """
-function huber_loss(ŷ, y; agg=mean, δ=one(eltype(ŷ)))
+function huber_loss(ŷ, y; agg=mean, δ=ofeltype(ŷ, 1))
    abs_error = abs.(ŷ .- y)
    temp = Zygote.dropgrad(abs_error .<  δ)
-   x = eltype(ŷ)(0.5)
+   x = ofeltype(ŷ, 0.5)
    agg(((abs_error.^2) .* temp) .* x .+ δ*(abs_error .- x*δ) .* (1 .- temp))
 end
 
@@ -124,12 +124,14 @@ julia> Flux.logitbinarycrossentropy.([-1.1491, 0.8619, 0.3127], [1, 1, 0])
 """
 # logitbinarycrossentropy(ŷ, y) = (1 - y)*ŷ - logσ(ŷ)
 
-function logitcrossentropy(ŷ, y; agg=mean, ϵ=eps(eltype(ŷ)))
+function logitcrossentropy(ŷ, y; agg=mean)
     agg(@.((1-y)*ŷ - logsigmoid(ŷ)))
 end
 # Re-definition to fix interaction with CuArrays.
 # CuArrays.@cufunc logitbinarycrossentropy(ŷ, y) = (1 - y)*ŷ - logσ(ŷ)
 
+# TODO normalise over last dimension is typically what you want to do. 
+# Possible deprecation path: `normalise(x; dims=1)` -> `normalise(x; dims)` -> `normalise(x; dims=size(x)[end])`  
 """
     normalise(x; dims=1)
 
@@ -156,10 +158,11 @@ julia> Flux.normalise(a, dims=2)
  -1.22474  0.0  1.22474
 ```
 """
-function normalise(x::AbstractArray; dims=1)
+function normalise(x::AbstractArray; dims=1, ϵ=ofeltype(x, 1e-6))
   μ′ = mean(x, dims=dims)
-  σ′ = std(x, dims=dims, mean=μ′, corrected=false)
-  return (x .- μ′) ./ σ′
+#   σ′ = std(x, dims=dims, mean=μ′, corrected=false) # use this when #478 gets merged
+  σ′ = std(x, dims=dims, corrected=false)
+  return (x .- μ′) ./ (σ′.+ ϵ)
 end
 
 """
@@ -220,7 +223,7 @@ architecture.
 Similar to the F1_score. Calculated as:
     1 - 2*sum(|ŷ .* y| + smooth) / (sum(ŷ.^2) + sum(y.^2) + smooth)`
 """
-dice_coeff_loss(ŷ, y; smooth=eltype(ŷ)(1.0)) = 1 - (2*sum(y .* ŷ) + smooth) / (sum(y.^2) + sum(ŷ.^2) + smooth) #TODO
+dice_coeff_loss(ŷ, y; smooth=ofeltype(ŷ, 1.0)) = 1 - (2*sum(y .* ŷ) + smooth) / (sum(y.^2) + sum(ŷ.^2) + smooth) #TODO
 
 """
     tversky_loss(ŷ, y; β=0.7)
@@ -231,7 +234,7 @@ Larger β weigh recall higher than precision (by placing more emphasis on false 
 Calculated as:
     1 - sum(|y .* ŷ| + 1) / (sum(y .* ŷ + β*(1 .- y) .* ŷ + (1 - β)*y .* (1 .- ŷ)) + 1)
 """
-tversky_loss(ŷ, y; β=eltype(ŷ)(0.7)) = 1 - (sum(y .* ŷ) + 1) / (sum(y .* ŷ + β*(1 .- y) .* ŷ + (1 - β)*y .* (1 .- ŷ)) + 1) #TODO
+tversky_loss(ŷ, y; β=ofeltype(ŷ, 0.7)) = 1 - (sum(y .* ŷ) + 1) / (sum(y .* ŷ + β*(1 .- y) .* ŷ + (1 - β)*y .* (1 .- ŷ)) + 1) #TODO
 
 """
     flatten(x::AbstractArray)

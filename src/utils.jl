@@ -4,6 +4,8 @@ nfan(n) = 1, n # A vector is treated as a n×1 matrix
 nfan(n_out, n_in) = n_in, n_out # In case of Dense kernels: arranged as matrices
 nfan(dims...) = prod(dims[1:end-2]) .* (dims[end-1], dims[end]) # In case of convolution kernels
 
+ofeltype(x, y) = convert(float(eltype(x)), y)
+
 """
     glorot_uniform(dims...)
 
