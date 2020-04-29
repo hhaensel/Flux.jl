@@ -126,7 +126,7 @@ end
     for T in (Float32, Float64)
       y = rand(T, 2)
       ŷ = rand(T, 2)
-      for f in (mse, crossentropy, logitcrossentropy, Flux.kldivergence, Flux.hinge, Flux.poisson,
+      for f in (mse, crossentropy, logitcrossentropy, Flux.kldivergence, Flux.hinge, Flux.poisson_loss,
               Flux.mae, Flux.huber_loss, Flux.msle, Flux.squared_hinge, Flux.dice_coeff_loss, Flux.tversky_loss)
         fwd, back = Flux.pullback(f, ŷ, y)
         @test fwd isa T
