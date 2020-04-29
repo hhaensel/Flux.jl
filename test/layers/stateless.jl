@@ -74,12 +74,12 @@ end
 
   logŷ, y = randn(3), rand(3)
   @testset "binarycrossentropy" begin
-    @test binarycrossentropy.(σ.(logŷ), y; ϵ=0) ≈ -y.*log.(σ.(logŷ)) - (1 .- y).*log.(1 .- σ.(logŷ))
-    @test binarycrossentropy.(σ.(logŷ), y) ≈ -y.*log.(σ.(logŷ) .+ eps.(σ.(logŷ))) - (1 .- y).*log.(1 .- σ.(logŷ) .+ eps.(σ.(logŷ)))
+    @test binarycrossentropy(σ.(logŷ), y; ϵ=0) ≈ mean(-y.*log.(σ.(logŷ)) - (1 .- y).*log.(1 .- σ.(logŷ)))
+    @test binarycrossentropy(σ.(logŷ), y) ≈ mean(-y.*log.(σ.(logŷ) .+ eps.(σ.(logŷ))) - (1 .- y).*log.(1 .- σ.(logŷ) .+ eps.(σ.(logŷ))))
   end
 
   @testset "logitbinarycrossentropy" begin
-    @test logitbinarycrossentropy.(logŷ, y) ≈ binarycrossentropy.(σ.(logŷ), y; ϵ=0)
+    @test logitbinarycrossentropy(logŷ, y) ≈ binarycrossentropy(σ.(logŷ), y; ϵ=0)
   end
 
   y = [1 2 3]
@@ -105,8 +105,8 @@ end
   y = [0.1 0.2 0.3]
   ŷ = [0.4 0.5 0.6]
   @testset "poisson" begin
-    @test Flux.poisson(ŷ, y) ≈ 0.6278353988097339
-    @test Flux.poisson(y, y) ≈ 0.5044459776946685
+    @test Flux.poisson_loss(ŷ, y) ≈ 0.6278353988097339
+    @test Flux.poisson_loss(y, y) ≈ 0.5044459776946685
   end
 
   y = [1.0 0.5 0.3 2.4]
