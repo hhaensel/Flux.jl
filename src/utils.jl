@@ -7,7 +7,6 @@ nfan(dims...) = prod(dims[1:end-2]) .* (dims[end-1], dims[end]) # In case of con
 ofeltype(x, y) = convert(float(eltype(x)), y)
 epseltype(x) = eps(float(eltype(x)))
 
-
 """
     glorot_uniform(dims...)
 

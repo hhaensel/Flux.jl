@@ -430,10 +430,14 @@ uuid = "e88e6eb3-aa80-5325-afca-941959d7151f"
 version = "0.4.20"
 =======
 deps = ["AbstractFFTs", "ArrayLayouts", "DiffRules", "FillArrays", "ForwardDiff", "IRTools", "InteractiveUtils", "LinearAlgebra", "MacroTools", "NNlib", "NaNMath", "Random", "Requires", "SpecialFunctions", "Statistics", "ZygoteRules"]
-git-tree-sha1 = "08ee0b7796c4c9ce644b9ecc326f3e047486baeb"
+git-tree-sha1 = "f7b0f77a86d2434abf693e3c0330e4682deed28d"
 uuid = "e88e6eb3-aa80-5325-afca-941959d7151f"
+<<<<<<< HEAD
 version = "0.4.17"
 >>>>>>> 654b100c... update
+=======
+version = "0.4.18"
+>>>>>>> b44ba162... fix tests
 
 [[ZygoteRules]]
 deps = ["MacroTools"]
