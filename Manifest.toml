@@ -20,9 +20,15 @@ version = "1.0.1"
 
 [[ArrayLayouts]]
 deps = ["FillArrays", "LinearAlgebra"]
+<<<<<<< HEAD
 git-tree-sha1 = "a504dca2ac7eda8761c8f7c1ed52427a1be75a3c"
 uuid = "4c555306-a7a7-4459-81d9-ec55ddd5c99a"
 version = "0.2.6"
+=======
+git-tree-sha1 = "5a57a6158c1d340635a89d19beb34b0f325a4431"
+uuid = "4c555306-a7a7-4459-81d9-ec55ddd5c99a"
+version = "0.2.5"
+>>>>>>> 654b100c... update
 
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -46,6 +52,7 @@ version = "4.0.0"
 
 [[CUDAdrv]]
 deps = ["CEnum", "CUDAapi", "Printf"]
+<<<<<<< HEAD
 git-tree-sha1 = "f56bbf18c86bcff7a961a32a4947a5abb2963a29"
 uuid = "c5f51814-7f29-56b8-a69c-e4d8f6be1fde"
 version = "6.3.0"
@@ -61,6 +68,23 @@ deps = ["InteractiveUtils", "UUIDs"]
 git-tree-sha1 = "cab4da992adc0a64f63fa30d2db2fd8bec40cab4"
 uuid = "da1fd8a2-8d9e-5ec2-8556-3022fb5608a2"
 version = "0.5.11"
+=======
+git-tree-sha1 = "17248da4169c0cdd1699da542f8e110fe4168af6"
+uuid = "c5f51814-7f29-56b8-a69c-e4d8f6be1fde"
+version = "6.2.3"
+
+[[CUDAnative]]
+deps = ["Adapt", "BinaryProvider", "CEnum", "CUDAapi", "CUDAdrv", "Cthulhu", "DataStructures", "ExprTools", "InteractiveUtils", "LLVM", "Libdl", "Pkg", "Printf", "TimerOutputs"]
+git-tree-sha1 = "0da071ed49a6f5f62d5164de071daa07cedaa1e6"
+uuid = "be33ccc6-a3ff-5ff2-a52e-74243cff1e17"
+version = "3.0.4"
+
+[[CodeTracking]]
+deps = ["InteractiveUtils", "UUIDs"]
+git-tree-sha1 = "c8f94de86731698373f3c82a8aa40d8ab765c50c"
+uuid = "da1fd8a2-8d9e-5ec2-8556-3022fb5608a2"
+version = "0.5.9"
+>>>>>>> 654b100c... update
 
 [[CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
@@ -70,9 +94,15 @@ version = "0.7.0"
 
 [[ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
+<<<<<<< HEAD
 git-tree-sha1 = "c73d9cfc2a9d8433dc77f5bff4bddf46b1d78c20"
 uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 version = "0.10.3"
+=======
+git-tree-sha1 = "f746d4fc892fdf683b5c22064c8e99b2f5b990e7"
+uuid = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
+version = "0.10.2"
+>>>>>>> 654b100c... update
 
 [[Colors]]
 deps = ["ColorTypes", "FixedPointNumbers", "InteractiveUtils", "Reexport"]
@@ -100,9 +130,15 @@ version = "1.0.2"
 
 [[CuArrays]]
 deps = ["AbstractFFTs", "Adapt", "CEnum", "CUDAapi", "CUDAdrv", "CUDAnative", "DataStructures", "GPUArrays", "Libdl", "LinearAlgebra", "MacroTools", "NNlib", "Pkg", "Printf", "Random", "Reexport", "Requires", "SparseArrays", "Statistics", "TimerOutputs"]
+<<<<<<< HEAD
 git-tree-sha1 = "870a4ac61e99c36f42d15e496fd290c841541d90"
 uuid = "3a865a2d-5b23-5a0f-bc46-62713ec82fae"
 version = "2.2.0"
+=======
+git-tree-sha1 = "ad04351946e2ee59a0f1295de28a750dc4917704"
+uuid = "3a865a2d-5b23-5a0f-bc46-62713ec82fae"
+version = "2.1.0"
+>>>>>>> 654b100c... update
 
 [[DataAPI]]
 git-tree-sha1 = "176e23402d80e7743fc26c19c681bfb11246af32"
@@ -173,6 +209,7 @@ uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
 
 [[GPUArrays]]
 deps = ["AbstractFFTs", "Adapt", "LinearAlgebra", "Printf", "Random", "Serialization"]
+<<<<<<< HEAD
 git-tree-sha1 = "ce4579ebffef43e07318e9544ffeb6532c95d04d"
 uuid = "0c68f7d7-f131-5f86-a1c3-88cf8149b2d7"
 version = "3.3.0"
@@ -182,6 +219,11 @@ deps = ["Cthulhu", "DataStructures", "InteractiveUtils", "LLVM", "Libdl", "Timer
 git-tree-sha1 = "5275aa268ecd09640b32560e1eae90c78816e4d1"
 uuid = "61eb1bfa-7361-4325-ad38-22787b887f55"
 version = "0.2.0"
+=======
+git-tree-sha1 = "c63cb01e3b6f48ab39f1e35c31ba870650814a18"
+uuid = "0c68f7d7-f131-5f86-a1c3-88cf8149b2d7"
+version = "3.2.0"
+>>>>>>> 654b100c... update
 
 [[IRTools]]
 deps = ["InteractiveUtils", "MacroTools", "Test"]
@@ -325,9 +367,15 @@ version = "0.10.0"
 
 [[StaticArrays]]
 deps = ["LinearAlgebra", "Random", "Statistics"]
+<<<<<<< HEAD
 git-tree-sha1 = "5c06c0aeb81bef54aed4b3f446847905eb6cbda0"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
 version = "0.12.3"
+=======
+git-tree-sha1 = "4118cba3529e99af61aea9a83f7bfd3cff5ffb28"
+uuid = "90137ffa-7385-5640-81b9-e52037218182"
+version = "0.12.2"
+>>>>>>> 654b100c... update
 
 [[Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
@@ -375,10 +423,17 @@ uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
 version = "1.2.11+9"
 
 [[Zygote]]
+<<<<<<< HEAD
 deps = ["AbstractFFTs", "ArrayLayouts", "DiffRules", "FillArrays", "ForwardDiff", "Future", "IRTools", "InteractiveUtils", "LinearAlgebra", "MacroTools", "NNlib", "NaNMath", "Random", "Requires", "SpecialFunctions", "Statistics", "ZygoteRules"]
 git-tree-sha1 = "707ceea58e2bd0ff3077ab13a92f8355181d3ee4"
 uuid = "e88e6eb3-aa80-5325-afca-941959d7151f"
 version = "0.4.20"
+=======
+deps = ["AbstractFFTs", "ArrayLayouts", "DiffRules", "FillArrays", "ForwardDiff", "IRTools", "InteractiveUtils", "LinearAlgebra", "MacroTools", "NNlib", "NaNMath", "Random", "Requires", "SpecialFunctions", "Statistics", "ZygoteRules"]
+git-tree-sha1 = "08ee0b7796c4c9ce644b9ecc326f3e047486baeb"
+uuid = "e88e6eb3-aa80-5325-afca-941959d7151f"
+version = "0.4.17"
+>>>>>>> 654b100c... update
 
 [[ZygoteRules]]
 deps = ["MacroTools"]

@@ -1,44 +1,35 @@
-# Cost functions
 """
     mae(ŷ, y; agg=mean)
 
-Return the Mean Absolute Error. 
+Return the loss corresponding to mean absolute error: 
 
-    l = abs.(ŷ .- y)
-
-The results
+    agg(abs.(ŷ .- y))
 """
 mae(ŷ, y; agg=mean) = agg(abs.(ŷ .- y))
 
 """
-    mse(ŷ, y)
+    mse(ŷ, y; agg=mean)
 
-Return the mean squared error between ŷ and y; calculated as
-`sum((ŷ .- y).^2) / length(y)`.
-
-# Examples
-```jldoctest
-julia> Flux.mse([0, 2], [1, 1])
-1//1
-```
+Return the loss corresponding to mean square error: 
+    
+    agg((ŷ .- y).^2)
 """
 mse(ŷ, y; agg=mean) = agg((ŷ .- y).^2)
 
 """
-    msle(ŷ, y; ϵ=eps(eltype(ŷ)))
+    msle(ŷ, y; agg=mean, ϵ=eps(eltype(ŷ)))
 
-Return the mean of the squared logarithmic errors; calculated as
-`sum((log.(ŷ .+ ϵ) .- log.(y .+ ϵ)).^2) / length(y)`.
+The loss corresponding to mean squared logarithmic errors, calculated as
+
+    agg((log.(ŷ .+ ϵ) .- log.(y .+ ϵ)).^2)
+
 The `ϵ` term provides numerical stability.
-
-Penalizes an under-predicted estimate greater than an over-predicted estimate.
+Penalizes an under-predicted estimate more than an over-predicted estimate.
 """
-msle(ŷ, y; agg=mean, ϵ=eps(eltype(ŷ))) = agg((log.(ŷ .+ ϵ) .- log.(y .+ ϵ)).^2)
-
-
+msle(ŷ, y; agg=mean, ϵ=epseltype(ŷ)) = agg((log.(ŷ .+ ϵ) .- log.(y .+ ϵ)).^2)
 
 """
-    huber_loss(ŷ, y; δ=1)
+    huber_loss(ŷ, y; δ=1, agg=mean)
 
 Return the mean of the [Huber loss](https://en.wikipedia.org/wiki/Huber_loss)
 given the prediction `ŷ` and true values `y`.
