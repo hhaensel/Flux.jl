@@ -1,7 +1,7 @@
-# v0.11
-* Change to `DataLoader`'s constructor [https://github.com/FluxML/Flux.jl/pull/1152] 
+# v0.11.0
 
-# v0.10.5
+* Change to `DataLoader`'s [constructor](https://github.com/FluxML/Flux.jl/pull/1152)
+* Uniform loss [interface](https://github.com/FluxML/Flux.jl/pull/1150)
 * Add option for [same padding](https://github.com/FluxML/Flux.jl/pull/901) to conv and pooling layers by setting `pad=SamePad()`.
 * Added option to set `bias` to [Flux.Zeros](https://github.com/FluxML/Flux.jl/pull/873) to eliminating `bias` from being trained.
 * Added `GlobalMaxPool` and `GlobalMeanPool` [layers](https://github.com/FluxML/Flux.jl/pull/950) for performing global pooling operations.
@@ -11,8 +11,13 @@
 * Testing suite improvements now test for gradients of all layers along with GPU support.
 * Functors have now moved to [Functors.jl](https://github.com/FluxML/Flux.jl/pull/1174) to allow for their use outside of Flux.
 * Added [helper functions](https://github.com/FluxML/Flux.jl/pull/873) `Flux.convfilter` and `Flux.depthwiseconvfilter` to construct weight arrays for convolutions outside of layer constructors so as to not have to depend on the default layers for custom implementations.
+* and many more fixes and additions...
+
+# v0.10.1 - v0.10.4
+See GitHub's releases.
 
 # v0.10.0
+
 * The default AD engine has switched from [Tracker to Zygote.jl](https://github.com/FluxML/Flux.jl/pull/669)
   - The dependency on Tracker.jl has been removed.
   - This means Flux now does not depend on using a specialised `TrackedArray` type, and can be used with normal Array implementations directly.
@@ -26,6 +31,7 @@
 * `testmode!` is deprecated in favour of [istraining](https://github.com/FluxML/Flux.jl/pull/669)
 
 # v0.9.0
+
 * [Depthwise convolutional layer API changes](https://github.com/FluxML/Flux.jl/pull/756) from `in => mult` channel specification to `in => out` channel specification, and deprecates implicit `out` constructor.
 * New [SkipConnection](https://github.com/FluxML/Flux.jl/pull/446), which can be used to train residual neural network architectures.
 * New [RADAM](https://github.com/FluxML/Flux.jl/pull/842) optimiser.

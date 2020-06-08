@@ -80,19 +80,19 @@ end
 
   y = [1 2 3 4]
   ŷ = [5.0 6.0 7.0 8.0]
-  @testset "hinge" begin
-    @test Flux.hinge(ŷ, y) ≈ 0
-    @test Flux.hinge(y, 0.5 .* y) ≈ 0.125
+  @testset "hinge_loss" begin
+    @test Flux.hinge_loss(ŷ, y) ≈ 0
+    @test Flux.hinge_loss(y, 0.5 .* y) ≈ 0.125
   end
 
-  @testset "squared_hinge" begin
-    @test Flux.squared_hinge(ŷ, y) ≈ 0
-    @test Flux.squared_hinge(y, 0.5 .* y) ≈ 0.0625
+  @testset "squared_hinge_loss" begin
+    @test Flux.squared_hinge_loss(ŷ, y) ≈ 0
+    @test Flux.squared_hinge_loss(y, 0.5 .* y) ≈ 0.0625
   end
 
   y = [0.1 0.2 0.3]
   ŷ = [0.4 0.5 0.6]
-  @testset "poisson" begin
+  @testset "poisson_loss" begin
     @test Flux.poisson_loss(ŷ, y) ≈ 0.6278353988097339
     @test Flux.poisson_loss(y, y) ≈ 0.5044459776946685
   end
@@ -100,22 +100,22 @@ end
   y = [1.0 0.5 0.3 2.4]
   ŷ = [0 1.4 0.5 1.2]
   @testset "dice_coeff_loss" begin
-    @test Flux.dice_coeff_loss(ŷ, y, dims=(1,2)) ≈ 0.2799999999999999
-    @test Flux.dice_coeff_loss(y, y, dims=(1,2)) ≈ 0.0
+    @test Flux.dice_coeff_loss(ŷ, y) ≈ 0.2799999999999999
+    @test Flux.dice_coeff_loss(y, y) ≈ 0.0
   end
 
   @testset "tversky_loss" begin
-    @test Flux.tversky_loss(ŷ, y, dims=(1,2)) ≈ 0.036175710594315236
-    @test Flux.tversky_loss(ŷ, y, dims=(1,2), β = 0.8) ≈ 0.06281407035175879
-    @test Flux.tversky_loss(y, y, dims=(1,2)) ≈ -0.6904761904761902
+    @test Flux.tversky_loss(ŷ, y) ≈ -0.06772009029345383
+    @test Flux.tversky_loss(ŷ, y, β=0.8) ≈ -0.09490740740740744
+    @test Flux.tversky_loss(y, y) ≈ -0.5576923076923075
   end
 
   @testset "no spurious promotions" begin
     for T in (Float32, Float64)
       y = rand(T, 2)
       ŷ = rand(T, 2)
-      for f in (mse, crossentropy, logitcrossentropy, Flux.kldivergence, Flux.hinge, Flux.poisson_loss,
-              Flux.mae, Flux.huber_loss, Flux.msle, Flux.squared_hinge, Flux.dice_coeff_loss, Flux.tversky_loss)
+      for f in (mse, crossentropy, logitcrossentropy, Flux.kldivergence, Flux.hinge_loss, Flux.poisson_loss,
+              Flux.mae, Flux.huber_loss, Flux.msle, Flux.squared_hinge_loss, Flux.dice_coeff_loss, Flux.tversky_loss)
         fwd, back = Flux.pullback(f, ŷ, y)
         @test fwd isa T
         @test eltype(back(one(T))[1]) == T

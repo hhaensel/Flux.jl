@@ -17,7 +17,7 @@ Return the loss corresponding to mean square error:
 mse(ŷ, y; agg=mean) = agg((ŷ .- y).^2)
 
 """
-    msle(ŷ, y; agg=mean, ϵ=eps(eltype(ŷ)))
+    msle(ŷ, y; agg=mean, ϵ=eps(ŷ))
 
 The loss corresponding to mean squared logarithmic errors, calculated as
 
@@ -64,7 +64,7 @@ numerical stability.
 
 See also: [`Flux.logitcrossentropy`](@ref), [`Flux.bce_loss`](@ref), [`Flux.logitbce_loss`](@ref)
 """
-function crossentropy(ŷ, y; dims=1, agg=mean, ϵ=eps(eltype(ŷ)))
+function crossentropy(ŷ, y; dims=1, agg=mean, ϵ=epseltype(ŷ))
     agg(.-sum(xlogy.(y, ŷ .+ ϵ); dims=dims))
 end
 
@@ -100,7 +100,7 @@ Use of `logitbce_loss` is recomended over `bce_loss` for numerical stability.
 
 See also: [`Flux.crossentropy`](@ref), [`Flux.logitcrossentropy`](@ref), [`Flux.logitbce_loss`](@ref)
 """
-function bce_loss(ŷ, y; agg=mean, ϵ=eps(eltype(ŷ)))
+function bce_loss(ŷ, y; agg=mean, ϵ=epseltype(ŷ))
     agg(@.(-xlogy(y, ŷ+ϵ) - xlogy(1-y, 1-ŷ+ϵ)))
 end
 # Re-definition to fix interaction with CuArrays.
@@ -134,7 +134,7 @@ from the other.
 It is always non-negative and zero only when both the distributions are equal
 everywhere.
 """
-function kldivergence(ŷ, y; dims=1, agg=mean, ϵ=eps(eltype(ŷ)))
+function kldivergence(ŷ, y; dims=1, agg=mean, ϵ=epseltype(ŷ))
   entropy = agg(sum(xlogx.(y), dims=dims))
   cross_entropy = crossentropy(ŷ, y; dims=dims, agg=agg, ϵ=ϵ)
   return entropy + cross_entropy
@@ -146,28 +146,28 @@ end
 # Return how much the predicted distribution `ŷ` diverges from the expected Poisson
 # distribution `y`; calculated as `sum(ŷ .- y .* log.(ŷ)) / size(y, 2)`.
 REDO
-[More information.](https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/loss-functions/poisson).
+[More information.](https://peltarion.com/knowledge-center/documentation/modeling-view/build-an-ai-model/loss-functions/poisson_loss).
 """
 poisson_loss(ŷ, y; agg=mean) = agg(ŷ .- xlogy.(y, ŷ))
 
 """
     hinge_loss(ŷ, y; agg=mean)
 
-Return the [hinge loss](https://en.wikipedia.org/wiki/Hinge_loss) given the
+Return the [hinge_loss loss](https://en.wikipedia.org/wiki/Hinge_loss) given the
 prediction `ŷ` and true labels `y` (containing 1 or -1); calculated as
 `sum(max.(0, 1 .- ŷ .* y)) / size(y, 2)`.
 
-See also: [`squared_hinge`](@ref)
+See also: [`squared_hinge_loss`](@ref)
 """
 hinge_loss(ŷ, y; agg=mean) = agg(max.(0, 1 .-  ŷ .* y))
 
 """
-    squared_hinge(ŷ, y)
+    squared_hinge_loss(ŷ, y)
 
-Return the squared hinge loss given the prediction `ŷ` and true labels `y`
+Return the squared hinge_loss loss given the prediction `ŷ` and true labels `y`
 (containing 1 or -1); calculated as `sum((max.(0, 1 .- ŷ .* y)).^2) / size(y, 2)`.
 
-See also: [`hinge`](@ref)
+See also: [`hinge_loss`](@ref)
 """
 squared_hinge_loss(ŷ, y; agg=mean) = agg((max.(0, 1 .- ŷ .* y)).^2)
 
@@ -178,30 +178,37 @@ Return a loss based on the dice coefficient.
 Used in the [V-Net](https://arxiv.org/pdf/1606.04797v1.pdf) image segmentation
 architecture.
 Similar to the F1_score. Calculated as:
-    1 - 2*sum(|ŷ .* y| + smooth) / (sum(ŷ.^2) + sum(y.^2) + smooth)`
+
+    1 - 2*sum(|ŷ .* y| + smooth) / (sum(ŷ.^2) + sum(y.^2) + smooth)
 """
-dice_coeff_loss(ŷ, y; smooth=ofeltype(ŷ, 1.0)) = 1 - (2*sum(y .* ŷ) + smooth) / (sum(y.^2) + sum(ŷ.^2) + smooth) #TODO
+dice_coeff_loss(ŷ, y; smooth=ofeltype(ŷ, 1.0)) = 1 - (2*sum(y .* ŷ) + smooth) / (sum(y.^2) + sum(ŷ.^2) + smooth) #TODO agg
 
 """
     tversky_loss(ŷ, y; β=0.7)
 
 Return the [Tversky loss](https://arxiv.org/pdf/1706.05721.pdf).
 Used with imbalanced data to give more weight to false negatives.
-Larger β weigh recall higher than precision (by placing more emphasis on false negatives)
+Larger β weigh recall more than precision (by placing more emphasis on false negatives)
 Calculated as:
     1 - sum(|y .* ŷ| + 1) / (sum(y .* ŷ + β*(1 .- y) .* ŷ + (1 - β)*y .* (1 .- ŷ)) + 1)
 """
-tversky_loss(ŷ, y; β=ofeltype(ŷ, 0.7)) = 1 - (sum(y .* ŷ) + 1) / (sum(y .* ŷ + β*(1 .- y) .* ŷ + (1 - β)*y .* (1 .- ŷ)) + 1) #TODO
-
-
+function tversky_loss(ŷ, y; β=ofeltype(ŷ, 0.7))
+    #TODO add agg
+    num = sum(y .* ŷ) + 1
+    den = sum(y .* ŷ + β*(1 .- y) .* ŷ + (1 - β)*y .* (1 .- ŷ)) + 1
+    1 - num / den
+end
+             
 """
     xlogx(x)
+
 Return `x * log(x)` for `x ≥ 0`, handling `x = 0` by taking the downward limit.
 """
 function xlogx(x)
   result = x * log(x)
   ifelse(iszero(x), zero(result), result)
 end
+
 CuArrays.@cufunc function xlogx(x)
   result = x * log(x)
   ifelse(iszero(x), zero(result), result)
@@ -209,12 +216,14 @@ end
 
 """
     xlogy(x, y)
-Return `x * log(y)` for `y > 0` with correct limit at `x = 0`.
+
+    Return `x * log(y)` for `y > 0` with correct limit at `x = 0`.
 """
 function xlogy(x, y)
   result = x * log(y)
   ifelse(iszero(x), zero(result), result)
 end
+
 CuArrays.@cufunc function xlogy(x, y)
   result = x * log(y)
   ifelse(iszero(x), zero(result), result)
