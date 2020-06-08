@@ -25,8 +25,8 @@ Flux.msle
 Flux.huber_loss
 Flux.crossentropy
 Flux.logitcrossentropy
-Flux.binarycrossentropy
-Flux.logitbinarycrossentropy
+Flux.bce_loss
+Flux.logitbce_loss
 Flux.kldivergence
 Flux.poisson_loss
 Flux.hinge

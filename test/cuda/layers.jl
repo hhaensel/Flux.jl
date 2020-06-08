@@ -69,8 +69,8 @@ const stateless_layers = [Flux.mse,
                           Flux.logitcrossentropy,
                           Flux.normalise]
 
-const stateless_layers_broadcasted = [Flux.binarycrossentropy,
-                                      Flux.logitbinarycrossentropy]
+const stateless_layers_broadcasted = [Flux.bce_loss,
+                                      Flux.logitbce_loss]
 
 function stateless_gradtest(f, args...)
   @test gradient((args...) -> sum(f(args...)), args...)[1] isa CuArray

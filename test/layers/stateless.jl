@@ -1,6 +1,6 @@
 using Test
 using Flux: onehotbatch, mse, crossentropy, logitcrossentropy,
-            σ, binarycrossentropy, logitbinarycrossentropy, flatten,
+            σ, bce_loss, logitbce_loss, flatten,
             xlogx, xlogy
 
 const ϵ = 1e-7
@@ -60,26 +60,14 @@ end
     @test logitcrossentropy(logŷ, y) ≈ lossvalue
   end
 
-  @testset "weighted_crossentropy" begin
-    @test crossentropy(ŷ, y, weight = ones(2)) ≈ lossvalue
-    @test crossentropy(ŷ, y, weight = [.5, .5]) ≈ lossvalue/2
-    @test crossentropy(ŷ, y, weight = [2, .5]) ≈ 1.5049660054074199
-  end
-
-  @testset "weighted_logitcrossentropy" begin
-    @test logitcrossentropy(logŷ, y, weight = ones(2)) ≈ lossvalue
-    @test logitcrossentropy(logŷ, y, weight = [.5, .5]) ≈ lossvalue/2
-    @test logitcrossentropy(logŷ, y, weight = [2, .5]) ≈ 1.5049660054074199
-  end
-
   logŷ, y = randn(3), rand(3)
-  @testset "binarycrossentropy" begin
-    @test binarycrossentropy(σ.(logŷ), y; ϵ=0) ≈ mean(-y.*log.(σ.(logŷ)) - (1 .- y).*log.(1 .- σ.(logŷ)))
-    @test binarycrossentropy(σ.(logŷ), y) ≈ mean(-y.*log.(σ.(logŷ) .+ eps.(σ.(logŷ))) - (1 .- y).*log.(1 .- σ.(logŷ) .+ eps.(σ.(logŷ))))
+  @testset "bce_loss" begin
+    @test bce_loss(σ.(logŷ), y; ϵ=0) ≈ mean(-y.*log.(σ.(logŷ)) - (1 .- y).*log.(1 .- σ.(logŷ)))
+    @test bce_loss(σ.(logŷ), y) ≈ mean(-y.*log.(σ.(logŷ) .+ eps.(σ.(logŷ))) - (1 .- y).*log.(1 .- σ.(logŷ) .+ eps.(σ.(logŷ))))
   end
 
-  @testset "logitbinarycrossentropy" begin
-    @test logitbinarycrossentropy(logŷ, y) ≈ binarycrossentropy(σ.(logŷ), y; ϵ=0)
+  @testset "logitbce_loss" begin
+    @test logitbce_loss(logŷ, y) ≈ bce_loss(σ.(logŷ), y; ϵ=0)
   end
 
   y = [1 2 3]
