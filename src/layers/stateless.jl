@@ -40,6 +40,7 @@ given the prediction `ŷ` and true values `y`.
 """
 function huber_loss(ŷ, y; agg=mean, δ=ofeltype(ŷ, 1))
    abs_error = abs.(ŷ .- y)
+   #TODO: remove dropgrad when Zygote can handle this function with CuArrays
    temp = Zygote.dropgrad(abs_error .<  δ)
    x = ofeltype(ŷ, 0.5)
    agg(((abs_error.^2) .* temp) .* x .+ δ*(abs_error .- x*δ) .* (1 .- temp))
@@ -53,11 +54,11 @@ calculated as
 
     agg(-sum(y .* log.(ŷ .+ ϵ); dims=dims))
 
-Cross entropy is tipically used as loss in multi-class classification,
-in which case the labels `y` are given  in a one-hot format. 
-`dims` specifies the dimension (or dimensions) containing the class probabilities.
-The prediction `ŷ` is supposed to sum to one across dimension `dims`,
-as would be the case with the output of a [`Flux.softmax`](@ref) operation. 
+Cross entropy is tipically used as a loss in multi-class classification,
+in which case the labels `y` are given in a one-hot format. 
+`dims` specifies the dimension (or the dimensions) containing the class probabilities.
+The prediction `ŷ` is supposed to sum to one across `dims`,
+as would be the case with the output of a [`softmax`](@ref) operation. 
 
 Use of [`logitcrossentropy`](@ref) is recomended over `crossentropy` for 
 numerical stability.
@@ -217,7 +218,7 @@ end
 """
     xlogy(x, y)
 
-    Return `x * log(y)` for `y > 0` with correct limit at `x = 0`.
+Return `x * log(y)` for `y > 0` with correct limit at `x = 0`.
 """
 function xlogy(x, y)
   result = x * log(y)
