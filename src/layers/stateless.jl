@@ -46,12 +46,8 @@ function huber_loss(ŷ, y; agg=mean, δ=ofeltype(ŷ, 1))
 end
 
 """
-<<<<<<< HEAD
-    crossentropy(ŷ, y; weight = nothing)
-=======
     crossentropy(ŷ, y; weight=nothing, dims=1, ϵ=eps(eltype(ŷ)), 
                        logits=false, agg=mean)
->>>>>>> b44ba162... fix tests
 
 Return the cross entropy between the given probability distributions;
 calculated as `-sum(y .* log.(ŷ) .* weight) / size(y, 2)`.
@@ -69,31 +65,15 @@ julia> Flux.crossentropy(softmax([-1.1491, 0.8619, 0.3127]), [1, 1, 0])
 3.085467254747739
 ```
 """
-<<<<<<< HEAD
 function crossentropy(ŷ, y; dims=1, agg=mean, ϵ=eps(eltype(ŷ)))
     agg(.-sum(xlogy.(y, ŷ .+ ϵ); dims=dims))
-=======
-function crossentropy(ŷ, y; dims=1, agg=mean, ϵ=epseltype(ŷ), 
-                    weight=nothing, logits=false)
-  if logits
-    return logitcrossentropy(ŷ, y; dims=dims, agg=agg, weight=weight)
-  end
-  agg(.-wsum(weight, y .* log.(ŷ .+ ϵ); dims=dims))
->>>>>>> b44ba162... fix tests
 end
 
 """
     logitcrossentropy(ŷ, y; weight = 1)
 
-<<<<<<< HEAD
 Return the crossentropy computed after a [`Flux.logsoftmax`](@ref) operation;
 calculated as `-sum(y .* logsoftmax(ŷ) .* weight) / size(y, 2)`.
-=======
-Return the cross[1.0 0.5 0.3 2.4]entropy computed after a [`Flux.logsoftmax`](@ref) operation;
-calculated as
-
-    agg(.-sum(weight .* y .* logsoftmax(ŷ; dims=dims); dims=dims))
->>>>>>> b44ba162... fix tests
 
 `logitcrossentropy(ŷ, y)` is mathematically equivalent to
 [`Flux.crossentropy(softmax(ŷ), y)`](@ref) but it is more numerically stable.
@@ -105,11 +85,7 @@ function logitcrossentropy(ŷ, y; dims=1, agg=mean)
 end
 
 """
-<<<<<<< HEAD
     binarycrossentropy(ŷ, y; ϵ=eps(ŷ))
-=======
-    binarycrossentropy(ŷ, y; agg=mean, ϵ=epseltype(ŷ), logits=false)
->>>>>>> b44ba162... fix tests
 
 Return ``-y*\\log(ŷ + ϵ) - (1-y)*\\log(1-ŷ + ϵ)``. The `ϵ` term provides numerical stability.
 
@@ -117,16 +93,8 @@ Typically, the prediction `ŷ` is given by the output of a [`sigmoid`](@ref) ac
 If `logits=true`, the input `̂y` is first fed to a [`sigmoid`](@ref) activation.
 See also: [`Flux.crossentropy`](@ref), [`Flux.logitcrossentropy`](@ref), [`Flux.logitbinarycrossentropy`](@ref)
 """
-<<<<<<< HEAD
 function binarycrossentropy(ŷ, y; agg=mean, ϵ=eps(eltype(ŷ)))
     agg(@.(-xlogy(ŷ+ϵ) - xlogy(1-y, 1-ŷ+ϵ)))
-=======
-function binarycrossentropy(ŷ, y; agg=mean, ϵ=epseltype(ŷ), logits=false)
-  if logits
-    return logitbinarycrossentropy(ŷ, y; agg=agg)
-  end
-  agg(@.(-y*log(ŷ+ϵ) - (1-y)*log(1-ŷ+ϵ)))
->>>>>>> b44ba162... fix tests
 end
 # Re-definition to fix interaction with CuArrays.
 # CuArrays.@cufunc binarycrossentropy(ŷ, y; ϵ=eps(ŷ)) = -y*log(ŷ + ϵ) - (1 - y)*log(1 - ŷ + ϵ)
