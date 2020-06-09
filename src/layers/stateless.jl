@@ -248,12 +248,13 @@ function flatten(x::AbstractArray)
 end
 
 # TODO normalise over last dimension is typically what you want to do. 
-# Possible deprecation path: `normalise(x; dims=1)` -> `normalise(x; dims)` -> `normalise(x; dims=size(x)[end])`  
+# Deprecation path: `normalise(x; dims=1)` -> `normalise(x; dims)` -> `normalise(x; dims=size(x)[end])`  
 """
-    normalise(x; dims)
+    normalise(x; dims, ϵ=1e-6)
 
 Normalise `x` to mean 0 and standard deviation 1 across the dimensions given by `dims`.
 Defaults to normalising over columns.
+`ϵ` is a small additive factor added to the denominator for numerical stability.
 
 ```jldoctest
 julia> a = reshape(collect(1:9), 3, 3)
@@ -262,7 +263,7 @@ julia> a = reshape(collect(1:9), 3, 3)
  2  5  8
  3  6  9
 
-julia> Flux.normalise(a)
+julia> Flux.normalise(a, dims=1)
 3×3 Array{Float64,2}:
  -1.22474  -1.22474  -1.22474
   0.0       0.0       0.0
