@@ -26,7 +26,7 @@ The loss corresponding to mean squared logarithmic errors, calculated as
 The `ϵ` term provides numerical stability.
 Penalizes an under-estimation more than an over-estimatation.
 """
-msle(ŷ, y; agg=mean, ϵ=epseltype(ŷ)) = agg((log.(ŷ .+ ϵ) .- log.(y .+ ϵ)).^2)
+msle(ŷ, y; agg=mean, ϵ=epseltype(ŷ)) = agg((log.((ŷ .+ ϵ) ./ (y .+ ϵ))).^2)
 
 """
     huber_loss(ŷ, y; δ=1, agg=mean)
