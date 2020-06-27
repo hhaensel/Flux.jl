@@ -152,10 +152,10 @@ logitbinarycrossentropy(ŷ, y) = (1 - y)*ŷ - logσ(ŷ)
 CuArrays.@cufunc logitbinarycrossentropy(ŷ, y) = (1 - y)*ŷ - logσ(ŷ)
 
 """
-    normalise(x; dims=1)
+    normalise(x; dims=1, ϵ = sqrt(eps(eltype(x))))
 
 Normalise `x` to mean 0 and standard deviation 1 across the dimensions given by `dims`.
-Defaults to normalising over columns.
+Defaults to normalising over columns. Regularizes the standard deviation by `ϵ`.
 
 ```jldoctest
 julia> a = reshape(collect(1:9), 3, 3)
@@ -177,10 +177,10 @@ julia> Flux.normalise(a, dims=2)
  -1.22474  0.0  1.22474
 ```
 """
-function normalise(x::AbstractArray; dims=1)
+function normalise(x::AbstractArray; dims=1, ϵ = sqrt(eps(eltype(x/1))))
   μ′ = mean(x, dims = dims)
   σ′ = std(x, dims = dims, mean = μ′, corrected=false)
-  return (x .- μ′) ./ σ′
+  return (x .- μ′) ./ (σ′ .+ ϵ)
 end
 
 """
