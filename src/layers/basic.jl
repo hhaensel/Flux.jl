@@ -1,3 +1,14 @@
+# fallback for arbitrary functions/layers
+# since we aren't care about batch dimension, we are free to just set it to 1
+"""
+    outdims(f, isize)
+
+Calculates the output dimensions of `f(x)` where `size(x) == isize`.
+The batch dimension is ignored.
+*Warning: this may be slow depending on `f`*
+"""
+outdims(f, isize) = size(f(ones(Float32, isize..., 1)))[1:end-1]
+
 """
     Chain(layers...)
 
@@ -64,10 +75,6 @@ outdims(c::Chain, isize) = foldr(outdims, reverse(c.layers), init = isize)
 # see issue https://github.com/FluxML/Flux.jl/issues/702
 # Johnny Chen -- @johnnychen94
 # only slightly changed to better handle interaction with Zygote @dsweber2
-
-# fallback
-outdims(f::Function, isize::Tuple) = size(f(ones(Float32, isize..., 1)))[1:end-1]    # since we aren't care about batch dimension, we are free to just set it to 1
-
 """
     activations(c::Chain, input)
 
